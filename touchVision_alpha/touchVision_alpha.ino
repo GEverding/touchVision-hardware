@@ -90,9 +90,9 @@ float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gra
 uint8_t teapotPacket[14] = { '$', 0x02, 0,0, 0,0, 0,0, 0,0, 0x00, 0x00, '\r', '\n' };
 
 // touchVision Definitions
-float dt = float(1.0 / 100.0); // This variable assumes the sampling frequency is 200 Hz.
-float fifo_sample_period = float(1.0 / 100.0);
-float LSB_g = float(16384.0 / 2.0); // This variable assumes the LSB/g  rjabaker -- is this incorrect?, should it be divided by two
+float dt = float(0.02272727273); // float(1.0 / 100.0);
+float fifo_sample_period = dt; // float(1.0 / 100.0);
+// float LSB_g = float(16384.0 / 2.0); // This variable assumes the LSB/g  rjabaker -- is this incorrect?, should it be divided by two
 float accel_g = 9.832; // m/s^2
 int sample_count = 0;
 int send_rate = 25; // Send once every 25 samples
