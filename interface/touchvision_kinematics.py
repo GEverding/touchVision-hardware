@@ -119,6 +119,16 @@ class KinematicsSolver:
 	def get_latest_measurements(self):
 		return [self.time, self.pos[0][-1], self.pos[1][-1], self.pos[2][-1], self.normalized_pressure_value]
 
+	def reset(self):
+		# Reset all position measurements
+		# Leave Kalman filters running
+		self.pos[0][0] = 0.0
+		self.pos[0][1] = 0.0
+		self.pos[1][0] = 0.0
+		self.pos[1][1] = 0.0
+		self.pos[2][0] = 0.0
+		self.pos[2][1] = 0.0
+
 	def adjust_dc_filter(self, raw_accel, axis):
 		if(self.number_of_particles_filtered[axis] < constants.WINDOW_SIZE):
 			# Add new particle to fill up the window (only happens when filter is starting up)
