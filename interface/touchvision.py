@@ -10,7 +10,6 @@ while(1):
 	# print(incoming_data)
 	if("DMP ready! Waiting for first interrupt..." in incoming_data): break
 
-count = 0
 while(1):
 	incoming_data = ser.readline()
 	packet = incoming_data.split(constants.PACKET_DELIMINATOR)
@@ -19,5 +18,3 @@ while(1):
 		data = sub_packet.split(constants.SUB_PACKET_DELIMINATOR)
 		kinematics.process_acceleration_sample([float(data[0]), float(data[1]), float(data[2])], float(data[3]), float(data[4]))
 		[t, x, y, z, pressure] = kinematics.get_latest_measurements()
-		# count += 1
-		# if(count % 500 == 0): kinematics.reset()

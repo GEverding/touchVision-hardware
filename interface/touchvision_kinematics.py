@@ -1,6 +1,6 @@
 import constants
-import plotter
-import numpy as np
+# import plotter
+# import numpy as np
 import kalman
 
 class KinematicsSolver:
@@ -70,6 +70,7 @@ class KinematicsSolver:
 		# fh.close()
 
 	def log_data(self, time):
+		return 0
 		# if(len(self.logged_time) > 2000):
 		# 	self.logged_time = []
 		# 	self.logged_data = []
@@ -78,8 +79,8 @@ class KinematicsSolver:
 		# self.logged_data.append(self.pos[0][-1])
 		# self.logged_data2.append(self.accel[0][-1])
 		# self.plotter.update_canvas(self.logged_time, self.logged_data, self.logged_data2)
-		print("a: t = " + str(time) + " --> (" + str(self.accel[0][-1]) + ", " + str(self.accel[1][-1]) + ", " + str(self.accel[2][-1]) + ")")
-		print("p: t = " + str(time) + " --> (" + str(self.pos[0][-1]) + ", " + str(self.pos[1][-1]) + ", " + str(self.pos[2][-1]) + ")")
+		# print("a: t = " + str(time) + " --> (" + str(self.accel[0][-1]) + ", " + str(self.accel[1][-1]) + ", " + str(self.accel[2][-1]) + ")")
+		# print("p: t = " + str(time) + " --> (" + str(self.pos[0][-1]) + ", " + str(self.pos[1][-1]) + ", " + str(self.pos[2][-1]) + ")")
 		# fh = open("data_x.csv", "a")
 		# fh.write(str(time) + "," + str(self.accel[0][-1]) + "," + str(self.vel[0][-1]) + "," + str(self.pos[0][-1]) + "\n")
 		# fh.close
