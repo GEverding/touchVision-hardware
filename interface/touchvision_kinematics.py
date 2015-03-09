@@ -40,18 +40,6 @@ class KinematicsSolver:
 		pos_z = [0.0, 0.0]
 		self.pos = [pos_x, pos_y, pos_z]
 
-		# Number of particles filtered
-		# self.number_of_particles_filtered = [0, 0, 0]
-
-		# Particles filtered arrays
-		# particles_filtered_x = [0.0] * constants.WINDOW_SIZE
-		# particles_filtered_y = [0.0] * constants.WINDOW_SIZE
-		# particles_filtered_z = [0.0] * constants.WINDOW_SIZE
-		# self.particles_filtered = [particles_filtered_x, particles_filtered_y, particles_filtered_z]
-
-		# Moving average (filter DC block)
-		# self.moving_average = [0.0, 0.0, 0.0]
-
 		# Pressure value
 		self.normalized_pressure_value = 0.0
 
@@ -60,8 +48,6 @@ class KinematicsSolver:
 
 		# Compensation offset
 		self.offset = [0, 0, 200]
-		# self.accel_threshold = [1.0 * constants.LSB_G / constants.ACCEL_G, 1.0 * constants.LSB_G / constants.ACCEL_G, 10.0 * constants.LSB_G / constants.ACCEL_G]
-		# self.delta_threshold = [30.0 * constants.LSB_G / constants.ACCEL_G, 30.0 * constants.LSB_G / constants.ACCEL_G, 30.0 * constants.LSB_G / constants.ACCEL_G]
 		self.accel_threshold = [4.0 * 0.05, 4.0 * 0.05, 4.0 * 0.05]
 		self.delta_threshold = [4.0 * 0.005, 4.0 * 0.005, 4.0 * 0.005]
 
@@ -71,16 +57,17 @@ class KinematicsSolver:
 		self.kalman_filter = [kalman_filter_x, kalman_filter_y, kalman_filter_z]
 
 	def define_logger(self):
+		return 0
 		# self.plotter = plotter.Plotter(self.id)
 		# self.logged_time = []
 		# self.logged_data = []
 		# self.logged_data2 = []
-		fh = open("data_x.csv","w")
-		fh.close()
-		fh = open("data_y.csv","w")
-		fh.close()
-		fh = open("data_z.csv","w")
-		fh.close()
+		# fh = open("data_x.csv","w")
+		# fh.close()
+		# fh = open("data_y.csv","w")
+		# fh.close()
+		# fh = open("data_z.csv","w")
+		# fh.close()
 
 	def log_data(self, time):
 		# if(len(self.logged_time) > 2000):
@@ -91,17 +78,17 @@ class KinematicsSolver:
 		# self.logged_data.append(self.pos[0][-1])
 		# self.logged_data2.append(self.accel[0][-1])
 		# self.plotter.update_canvas(self.logged_time, self.logged_data, self.logged_data2)
-		print("t = " + str(time) + " --> (" + str(self.accel[0][-1]) + ", " + str(self.accel[1][-1]) + ", " + str(self.accel[2][-1]) + ")")
-		print("t = " + str(time) + " --> (" + str(self.pos[0][-1]) + ", " + str(self.pos[1][-1]) + ", " + str(self.pos[2][-1]) + ")")
-		fh = open("data_x.csv", "a")
-		fh.write(str(time) + "," + str(self.accel[0][-1]) + "," + str(self.vel[0][-1]) + "," + str(self.pos[0][-1]) + "\n")
-		fh.close
-		fh = open("data_y.csv", "a")
-		fh.write(str(time) + "," + str(self.accel[1][-1]) + "," + str(self.vel[1][-1]) + "," + str(self.pos[1][-1]) + "\n")
-		fh.close
-		fh = open("data_z.csv", "a")
-		fh.write(str(time) + "," + str(self.accel[2][-1]) + "," + str(self.vel[2][-1]) + "," + str(self.pos[2][-1]) + "\n")
-		fh.close
+		print("a: t = " + str(time) + " --> (" + str(self.accel[0][-1]) + ", " + str(self.accel[1][-1]) + ", " + str(self.accel[2][-1]) + ")")
+		print("p: t = " + str(time) + " --> (" + str(self.pos[0][-1]) + ", " + str(self.pos[1][-1]) + ", " + str(self.pos[2][-1]) + ")")
+		# fh = open("data_x.csv", "a")
+		# fh.write(str(time) + "," + str(self.accel[0][-1]) + "," + str(self.vel[0][-1]) + "," + str(self.pos[0][-1]) + "\n")
+		# fh.close
+		# fh = open("data_y.csv", "a")
+		# fh.write(str(time) + "," + str(self.accel[1][-1]) + "," + str(self.vel[1][-1]) + "," + str(self.pos[1][-1]) + "\n")
+		# fh.close
+		# fh = open("data_z.csv", "a")
+		# fh.write(str(time) + "," + str(self.accel[2][-1]) + "," + str(self.vel[2][-1]) + "," + str(self.pos[2][-1]) + "\n")
+		# fh.close
 
 	def process_acceleration_sample(self, raw_accel, raw_pressure, time):
 		self.time = time
@@ -110,11 +97,8 @@ class KinematicsSolver:
 			# self.adjust_dc_filter(raw_accel, axis)
 			self.add_acceleration_data(raw_accel, time, axis)
 			self.add_position_data(time, axis)
-		# print("(" + str(self.pos[0][-1]) + ", " + str(self.pos[1][-1]) + ", " + str(self.pos[2][-1]) + ")")
-		# print("t = " + str(time) + " --> " + str(self.pos[0][-1]))
 		self.log_data(time)
 		self.add_pressure_data(raw_pressure)
-		# send data...
 
 	def get_latest_measurements(self):
 		return [self.time, self.pos[0][-1], self.pos[1][-1], self.pos[2][-1], self.normalized_pressure_value]
@@ -143,15 +127,10 @@ class KinematicsSolver:
 			self.number_of_particles_filtered[axis] = self.number_of_particles_filtered[axis] + 1
 
 	def add_acceleration_data(self, raw_accel, time, axis):
-		# filtered_particle = raw_accel[axis] - self.moving_average[axis]
 		if(time > constants.SEND_POSITION_THRESHOLD):
 			# ---Kalman Filter:
 		    self.kalman_filter[axis].input_latest_noisy_measurement(raw_accel[axis])
 		    filtered_particle = self.kalman_filter[axis].get_latest_estimated_measurement()
-		    # ---Moving Window:
-		    # filtered_particle = filtered_particle - self.moving_average[axis]
-		    # ---Basic:
-		    # filtered_particle = raw_accel[axis]
 		    if(self.sample_count == 1):
 			    self.accel[axis][1] = filtered_particle
 		    else:
@@ -161,9 +140,36 @@ class KinematicsSolver:
 	def add_position_data(self, time, axis):
 		if(time > constants.SEND_POSITION_THRESHOLD):
 			# Don't start process position data until the time threshold has passed (the sensors go ballistic during start-up)
-			# self.calculate_displacement_simple_threshold(axis)
-			# self.calculate_displacement_fft(axis)
 			self.calculate_displacement_fast(axis)
+
+	def add_pressure_data(self, pressure_value):
+		self.normalized_pressure_value = pressure_value / constants.PRESSURE_NORMALIZER
+
+	def calculate_displacement_fast(self, axis):
+		accel_last_index = self.get_FIFO_last_index()
+		ax_old = self.accel[axis][0] * constants.ACCEL_G / constants.LSB_G
+		ax = self.accel[axis][1] * constants.ACCEL_G / constants.LSB_G
+		if ax_old > 700: ax_old = ax_old / 10.0
+		if ax > 700: ax = ax / 10.0
+		vx = 0.0
+		px = 0.0
+		if abs(ax) < self.accel_threshold[axis] or abs(ax - ax_old) < self.delta_threshold[axis]: ax = 0
+		if(self.sample_count == 1):
+			vx = 0
+			px = self.dt + 0.5 * ax * self.dt * self.dt
+		else:
+			vx = 0
+			px = self.pos[axis][0] + 0.5 * ax * self.dt * self.dt * 1.0 # magic factor
+		# self.add_new_value_to_FIFO(self.vel[axis], vx, vel_last_index)
+		# self.add_new_value_to_FIFO(self.pos[axis], px, pos_last_index)
+		if(self.sample_count == 1):
+			self.vel[axis][1] = vx
+			self.pos[axis][1] = px
+		else:
+			self.vel[axis][0] = self.vel[axis][1]
+			self.vel[axis][1] = vx
+			self.pos[axis][0] = self.pos[axis][1]
+			self.pos[axis][1] = px
 
 	def calculate_displacement(self, axis):
 		last_index = self.get_FIFO_last_index()
@@ -243,32 +249,6 @@ class KinematicsSolver:
 		self.add_new_value_to_FIFO(self.vel[axis], vx, vel_last_index)
 		self.add_new_value_to_FIFO(self.pos[axis], px, pos_last_index)
 
-	def calculate_displacement_fast(self, axis):
-		accel_last_index = self.get_FIFO_last_index()
-		ax_old = self.accel[axis][0] * constants.ACCEL_G / constants.LSB_G
-		ax = self.accel[axis][1] * constants.ACCEL_G / constants.LSB_G
-		if ax_old > 700: ax_old = ax_old / 10.0
-		if ax > 700: ax = ax / 10.0
-		vx = 0.0
-		px = 0.0
-		if abs(ax) < self.accel_threshold[axis] or abs(ax - ax_old) < self.delta_threshold[axis]: ax = 0
-		if(self.sample_count == 1):
-			vx = 0
-			px = self.dt + 0.5 * ax * self.dt * self.dt
-		else:
-			vx = 0
-			px = self.pos[axis][0] + 0.5 * ax * self.dt * self.dt
-		# self.add_new_value_to_FIFO(self.vel[axis], vx, vel_last_index)
-		# self.add_new_value_to_FIFO(self.pos[axis], px, pos_last_index)
-		if(self.sample_count == 1):
-			self.vel[axis][1] = vx
-			self.pos[axis][1] = px
-		else:
-			self.vel[axis][0] = self.vel[axis][1]
-			self.vel[axis][1] = vx
-			self.pos[axis][0] = self.pos[axis][1]
-			self.pos[axis][1] = px
-
 	def calculate_displacement_fft(self, axis):
 		accel_last_index = self.get_FIFO_last_index()
 		vel_last_index = accel_last_index - 1 # Velocity hasn't been added to the FIFO yet
@@ -332,9 +312,6 @@ class KinematicsSolver:
 			# The FIFO size is not full yet. There are only sample_count values in the FIFO, so index that last value.
 			last_index = self.sample_count - 1
 		return last_index
-
-	def add_pressure_data(self, pressure_value):
-		self.normalized_pressure_value = pressure_value / constants.PRESSURE_NORMALIZER
 
 	def push_fifo(self, fifo, new_value):
 		for i in range(len(fifo) - 1):
